@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rx学习</title>
+</head>
+<body>
+<h4>我们做一个简单的BMI 公式</h4>
+weight:
+<input type="number" id="weight">kg
+<br>
+height:
+<input type="number" id="height"> cm
+<br>
+Your BMI is
+<div id="bmi"></div>
+
+</body>
+<!--<script src="https://code.jquery.com/jquery-3.1.0.js"></script>-->
+<script src="https://cdn.bootcss.com/rxjs/6.0.0-alpha.3/Rx.min.js"></script>
+<script>
+    let weight = document.getElementById('weight');
+    let height = document.getElementById('height');
+    let bmi = document.getElementById('bmi');
+
+    let weight$ = Rx.Observable.fromEvent(weight, 'input')
+        .pluck('target', 'value')
+    let height$ = Rx.Observable.fromEvent(height, 'input')
+        .pluck('target', 'value')
+    let bmi$ = Rx.Observable.combineLatest(weight$, height$, (w, h) => w / (h * h / 100 / 100))
+    bmi$.subscribe(b => bmi.innerHTML = b)
+
+    //这里combineLatest的逻辑不要太湿滑
+</script>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rx再体验</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://cdn.bootcss.com/rxjs/6.0.0-alpha.3/Rx.min.js"></script>
+</head>
+<body>
+<input type="text" name="" id="todo">
+<button id="addBtn">add</button>
+<script>
+    //一般Rxjs里面一边在Observable类型的变量后面加了$标识,这就是一个流变量,预定熟成的
+
+    //显示获取todo输入框对象, 然后定义一个观察者对象,将todo的keyup事件转化成一个数据流,
+    // 然后订阅这个数据流再input 中显示
+    // filter 过滤器
+    // map 允许对数据流每个元素进行函数,
+    //map使用的场景太多. rx团队准们搞出了 pluck 操作符;从事一系列嵌套属性中把值提取出来形成新的流.
+    let todo = document.getElementById('todo');
+    let input$ = Rx.Observable.fromEvent(todo, 'keyup');
+    // input$
+    // .filter(ev => ev.keyCode == 32)
+    // .map(ev=>ev.target.value*10)
+    //     .pluck('target', 'value')
+        // .subscribe(value => console.log(value.target.value))
+
+    //from操作符:可以支持数组,类数组的对象. promise iterable对象或类似Observable的对象
+    // 这个操作符应该是可以创建Observable的操作符中最常用的一个.几乎可以把任何对象换成Observable.
+
+    var button = document.querySelector('button');
+    Rx.Observable.fromEvent(button, 'click')
+        .throttleTime(1000)
+        .map(event => event.clientX)
+        .scan((count, clientX) => count + clientX, 0)
+        .subscribe(count => console.log(count));
+</script>
+</body>
+</html>
